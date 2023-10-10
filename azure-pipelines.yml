@@ -6,6 +6,8 @@ pool:
 
 steps:
 - script: |
+    python -m venv venv
+    source venv/bin/activate
     pip install -r msdocs-python-flask-webapp-quickstart-main/requirements.txt
     python msdocs-python-flask-webapp-quickstart-main/app.py
   displayName: 'Build Python Application'
