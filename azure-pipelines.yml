@@ -16,9 +16,24 @@ steps:
 #     pathtoPublish: 'path/to/artifacts'  # Replace with the path to your build artifacts
 #     artifactName: 'python-app-artifact'
 
+# - task: PublishBuildArtifacts@1
+#   displayName: 'Publish artifacts : drop'
+#   inputs:
+#     PathtoPublish: '$(build.artifactstagingdirectory)'
+#     ArtifactName: 'drop'
+#     publishLocation: 'Container'
+    
+
+- script: |
+    python setup.py sdist
+  displayName: 'Artifact creation'
+
+- task: CopyFiles@2
+  inputs:
+    targetFolder: $(build.artifactstagingdirectory)
+
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish artifacts : drop'
   inputs:
     PathtoPublish: '$(build.artifactstagingdirectory)'
-    ArtifactName: 'drop'
+    ArtifactName: 'dist'
     publishLocation: 'Container'
