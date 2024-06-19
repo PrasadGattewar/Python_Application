@@ -10,10 +10,8 @@ pool:
   demands:
     agent.name -equals Hulk
 
-strategy:
-  matrix:
-    Python39:
-      python.version: '3.9'
+variables:
+  python.version: '3.9'
 
 steps:
 - task: UsePythonVersion@0
