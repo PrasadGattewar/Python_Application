@@ -10,12 +10,6 @@ pool:
 
 strategy:
   matrix:
-    # Python38:
-    #   python.version: '3.8'
-    # Python39:
-    #   python.version: '3.9'
-    # Python310:
-    #   python.version: '3.10'
     Python311:
       python.version: '3.11'
 
@@ -30,3 +24,8 @@ steps:
     pip install -r requirements.txt
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Install dependencies'
+
+- script: |
+    python -m pytest
+  workingDirectory: msdocs-python-flask-webapp-quickstart-main
+  displayName: 'Run Test Cases'
