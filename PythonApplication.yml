@@ -27,6 +27,6 @@ steps:
 
 - script: |
     pip install pytest
-    pytest tests --junitxml=tests/results.xml
+    python -m pytest
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Run Test Cases'
