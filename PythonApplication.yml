@@ -6,7 +6,7 @@
 trigger: none
 
 pool:
-  vmImageName: ubuntu-latest
+  vmImageName: 'ubuntu-latest'
 
 variables:
     projectRoot: $(System.DefaultWorkingDirectory)
