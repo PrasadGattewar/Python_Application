@@ -29,5 +29,5 @@ steps:
     pip install --upgrade flask werkzeug
     python -m pytest
 
-  workingDirectory: msdocs-python-flask-webapp-quickstart-main
+  workingDirectory: msdocs-python-flask-webapp-quickstart-main/test
   displayName: 'Run Test Cases'
