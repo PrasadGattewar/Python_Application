@@ -9,15 +9,6 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-    Python38:
-      python.version: '3.8'
-    Python39:
-      python.version: '3.9'
-    Python310:
-      python.version: '3.10'
-    Python311:
-      python.version: '3.11'
-
     projectRoot: $(System.DefaultWorkingDirectory)
 
 stages:
@@ -25,13 +16,25 @@ stages:
   displayName: Build stage
   jobs:
   - job: BuildJob
+    strategy:
+      matrix:
+        Python38:
+          python.version: '3.8'
+        Python39:
+          python.version: '3.9'
+        Python310:
+          python.version: '3.10'
+        Python311:
+          python.version: '3.11'
+
     pool:
       vmImage: $(vmImageName)
+
     steps:
     - task: UsePythonVersion@0
       inputs:
-        versionSpec: '$(pythonVersion)'
-      displayName: 'Use Python $(pythonVersion)'
+        versionSpec: '$(python.version)'
+      displayName: 'Use Python $(python.version)'
 
     - script: |
         python -m pip install --upgrade pip
