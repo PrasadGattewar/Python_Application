@@ -26,6 +26,8 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
+    pip install --upgrade flask werkzeug
     python -m pytest
+
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Run Test Cases'
