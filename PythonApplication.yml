@@ -26,6 +26,7 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
+    pip install pytest
     pytest --junitxml=results.xml
   workingDirectory: msdocs-python-flask-webapp-quickstart-main/tests
   displayName: 'Run Test Cases'
