@@ -27,7 +27,7 @@ steps:
 
 - script: |
     python -m pip install --upgrade pip
-    pip app.py
+    pip msdocs-python-flask-webapp-quickstart-main/app.py
 
     # pip install -r requirements.txt
   displayName: 'Install dependencies'
