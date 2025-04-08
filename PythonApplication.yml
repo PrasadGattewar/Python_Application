@@ -13,6 +13,9 @@ strategy:
     Python311:
       python.version: '3.11'
 
+variables:
+  projectRootDir: msdocs-python-flask-webapp-quickstart-main
+
 steps:
 - task: UsePythonVersion@0
   inputs:
@@ -22,16 +25,26 @@ steps:
 - script: |
     python -m pip install --upgrade pip
     pip install -r requirements.txt
-  workingDirectory: msdocs-python-flask-webapp-quickstart-main
+  workingDirectory: $(projectRootDir)
   displayName: 'Install dependencies'
 
 - script: |
     pip install pytest
     python -m pytest
-  workingDirectory: msdocs-python-flask-webapp-quickstart-main
+  workingDirectory: $(projectRootDir)
   displayName: 'Run Test Cases'
 
+- task: ArchiveFiles@2
+  displayName: Archive File
+  inputs:
+    rootFolderOrFile: '$(projectRootDir)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
 - task: PublishBuildArtifacts@1
+  displayName: Upload Build Artifact
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
