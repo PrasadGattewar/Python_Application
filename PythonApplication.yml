@@ -25,8 +25,32 @@ steps:
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Install dependencies'
 
+- task: SonarQubePrepare@7
+  inputs:
+    SonarQube: 'SonarQube local server 9.9 Connection'
+    scannerMode: 'cli'
+    cliScannerVersion: '5.0'
+    configMode: 'manual'
+    cliProjectKey: 'PythonApp'
+    cliProjectName: 'PythonApp'
+    cliSources: '.'
+
 - script: |
     pip install pytest
     python -m pytest
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Run Test Cases'
+
+- task: SonarQubeAnalyze@7
+  inputs:
+    jdkversion: 'JAVA_HOME_17_X64'
+
+- task: SonarQubePublish@7
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
