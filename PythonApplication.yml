@@ -28,12 +28,15 @@ steps:
 - task: SonarQubePrepare@7
   inputs:
     SonarQube: 'SonarQube local server 9.9 Connection'
-    scannerMode: 'cli'
-    cliScannerVersion: '5.0'
+    scannerMode: 'CLI'
     configMode: 'manual'
-    cliProjectKey: 'PythonApp'
-    cliProjectName: 'PythonApp'
+    cliProjectKey: 'python-project'
+    cliProjectName: 'Python Project'
     cliSources: '.'
+    extraProperties: |
+      sonar.sources=.
+      sonar.language=py
+      sonar.python.version=3
 
 - script: |
     pip install pytest
