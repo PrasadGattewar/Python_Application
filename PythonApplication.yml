@@ -25,32 +25,11 @@ steps:
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Install dependencies'
 
-- task: SonarQubePrepare@7
-  inputs:
-    SonarQube: 'SonarQube local server 9.9 Connection'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'python-project'
-    cliProjectName: 'Python Project'
-    cliSources: '.'
-    extraProperties: |
-      sonar.sources=.
-      sonar.language=py
-      sonar.python.version=3
-
 - script: |
     pip install pytest
     python -m pytest
   workingDirectory: msdocs-python-flask-webapp-quickstart-main
   displayName: 'Run Test Cases'
-
-- task: SonarQubeAnalyze@7
-  inputs:
-    jdkversion: 'JAVA_HOME_17_X64'
-
-- task: SonarQubePublish@7
-  inputs:
-    pollingTimeoutSec: '300'
 
 - task: PublishBuildArtifacts@1
   inputs:
