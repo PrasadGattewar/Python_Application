@@ -5,6 +5,11 @@
 
 trigger: none
 
+pr:
+  branches:
+    include:
+      - master 
+
 pool:
   vmImage: ubuntu-latest
 
@@ -17,6 +22,7 @@ variables:
   projectRootDir: msdocs-python-flask-webapp-quickstart-main
 
 steps:
+- checkout: self
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '$(python.version)'
