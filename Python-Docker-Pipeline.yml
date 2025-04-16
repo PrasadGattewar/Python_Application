@@ -34,5 +34,6 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
+        buildContext: msdocs-python-flask-webapp-quickstart-main
         tags: |
           $(tag)
