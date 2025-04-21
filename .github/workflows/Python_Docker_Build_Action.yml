@@ -3,6 +3,9 @@ name: Build and Push to ACR
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
 jobs:
   build-and-Push:
     runs-on: ubuntu-latest
@@ -13,23 +16,30 @@ jobs:
 
     # Login to Azure
     - name: Azure Login
-      uses: azure/login@v1
+      uses: azure/login@v2.3.0
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        auth-type: oidc
+        enable-AzPSSession: true
 
-    # Docker login to ACR 
-    - name: Docker login to ACR
-      run: |
-        az acr login --name ${{ secrets.ACR_NAME }}
-
-    # Build and Push Image to ACR
-    - name: Build and Push to ACR
-      uses: docker/build-push-action@v2
+    - name: Azure CLI script
+      uses: azure/cli@v2.1.0
       with:
-        context: .
-        file: ./Dockerfile
-        push: true
-        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.sha }}
+        azcliversion: latest
+        inlineScript: |
+          az account show
+
+    # # Docker login to ACR 
+    # - name: Docker login to ACR
+    #   run: |
+    #     az acr login --name ${{ secrets.ACR_NAME }}
+
+    # # Build and Push Image to ACR
+    # - name: Build and Push to ACR
+    #   uses: docker/build-push-action@v2
+    #   with:
+    #     context: .
+    #     file: ./Dockerfile
+    #     push: true
+    #     tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.sha }}
