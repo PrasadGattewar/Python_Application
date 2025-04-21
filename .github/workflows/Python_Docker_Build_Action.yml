@@ -25,4 +25,5 @@ jobs:
       with:
         push: true
         tags: my-python-app:${{ github.sha }}
-        file: msdocs-python-flask-webapp-quickstart-main/Dockerfile
+        file: ./Dockerfile
+        context: .
