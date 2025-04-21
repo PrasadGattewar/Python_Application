@@ -18,7 +18,8 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        # creds: ${{ secrets.AZURE_CREDENTIALS }}
+        enable-oidc: true
 
     - name: Azure CLI script
       uses: azure/cli@v2.1.0
