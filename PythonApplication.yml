@@ -1,0 +1,57 @@
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger: none
+
+pr:
+  branches:
+    include:
+      - master 
+
+pool:
+  vmImage: ubuntu-latest
+
+strategy:
+  matrix:
+    Python311:
+      python.version: '3.11'
+
+variables:
+  projectRootDir: msdocs-python-flask-webapp-quickstart-main
+
+steps:
+- checkout: self
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  workingDirectory: $(projectRootDir)
+  displayName: 'Install dependencies'
+
+- script: |
+    pip install pytest
+    python -m pytest
+  workingDirectory: $(projectRootDir)
+  displayName: 'Run Test Cases'
+
+- task: ArchiveFiles@2
+  displayName: Archive File
+  inputs:
+    rootFolderOrFile: '$(projectRootDir)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: Upload Build Artifact
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
