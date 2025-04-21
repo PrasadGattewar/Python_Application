@@ -27,16 +27,16 @@ jobs:
         inlineScript: |
           az account show
 
-    # # Docker login to ACR 
-    # - name: Docker login to ACR
-    #   run: |
-    #     az acr login --name ${{ secrets.ACR_NAME }}
+    # Docker login to ACR 
+    - name: Docker login to ACR
+      run: |
+        az acr login --name ${{ secrets.ACR_NAME }}
 
-    # # Build and Push Image to ACR
-    # - name: Build and Push to ACR
-    #   uses: docker/build-push-action@v2
-    #   with:
-    #     context: .
-    #     file: ./Dockerfile
-    #     push: true
-    #     tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.sha }}
+    # Build and Push Image to ACR
+    - name: Build and Push to ACR
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.sha }}
