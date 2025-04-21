@@ -24,5 +24,5 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ${{ secrets.IMAGE_TAG }}
-        file: Dockerfile
+        tags: my-python-app:${{ github.sha }}
+        file: msdocs-python-flask-webapp-quickstart-main/Dockerfile
