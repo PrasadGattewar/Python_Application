@@ -15,6 +15,7 @@ jobs:
     # Checkout Repository
     - uses: actions/checkout@v4.2.2
 
+    # Azure Login
     - name: Azure Login
       uses: azure/login@v2.3.0
       with:
@@ -22,6 +23,7 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         # enable-AzPSSession: true
 
+    # Azure CLI
     - name: Azure CLI script
       uses: azure/cli@v2.1.0
       with:
@@ -29,10 +31,18 @@ jobs:
         inlineScript: |
           az account show
 
-    # Docker login to ACR 
-    - name: Docker login to ACR
-      run: |
-        az acr login --name ${{ secrets.ACR_NAME }}
+    # Docker Login for ACR by fetching the creds
+    - name: Docker Login to ACR
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ secrets.ACR_NAME }}.azurecr.io
+        username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+        password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+
+    # # Docker login to ACR 
+    # - name: Docker login to ACR
+    #   run: |
+    #     az acr login --name ${{ secrets.ACR_NAME }}
 
     - name: Move requirements.txt to root (for Docker build)
       run: cp msdocs-python-flask-webapp-quickstart-main/requirements.txt .
