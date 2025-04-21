@@ -32,7 +32,9 @@ jobs:
       run: |
         az acr login --name ${{ secrets.ACR_NAME }}
 
-    # Build and Push Image to ACR
+    - name: Move requirements.txt to root (for Docker build)
+      run: cp msdocs-python-flask-webapp-quickstart-main/requirements.txt .
+
     - name: Build and Push to ACR
       uses: docker/build-push-action@v2
       with:
@@ -40,3 +42,4 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.sha }}
+
