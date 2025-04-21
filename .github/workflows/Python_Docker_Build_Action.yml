@@ -1,7 +1,11 @@
 name: Build and Push to ACR
 
 on:
-  workflow_dispatch:
+  # Use this property for manual trigger
+  # workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 # permissions:
 #   id-token: write
