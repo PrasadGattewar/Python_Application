@@ -3,6 +3,10 @@ name: Build and Push to ACR
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   build-and-Push:
     runs-on: ubuntu-latest
