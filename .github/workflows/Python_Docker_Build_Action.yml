@@ -57,6 +57,6 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.sha }}
+        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.ref_name }}
         no-cache: true
 
