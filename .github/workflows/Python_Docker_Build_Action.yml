@@ -49,8 +49,11 @@ jobs:
     #   run: |
     #     az acr login --name ${{ secrets.ACR_NAME }}
 
-    - name: Move requirements.txt to root (for Docker build)
-      run: cp msdocs-python-flask-webapp-quickstart-main/requirements.txt .
+    - name: Move app files to root (for Docker build)
+      run: cp -r msdocs-python-flask-webapp-quickstart-main/* .
+
+    - name: Set image tag based on datetime
+      run: echo "IMAGE_TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
     - name: Build and Push to ACR
       uses: docker/build-push-action@v2
@@ -58,6 +61,9 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:latest
+        tags: |
+          ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
+          ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:latest
         no-cache: true
+
 
