@@ -59,6 +59,10 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+    # Set the ACR NAME
+    - name: Set ACR_NAME in Environment
+      run: echo "ACR_NAME=${{ vars.ACR_REGISTRY_NAME }}" >> $GITHUB_ENV
+
     # Get latest tag from ACR
     - name: Get latest image tag from ACR
       id: get_tag
@@ -78,5 +82,5 @@ jobs:
         az containerapp update \
           --name mycontainerapp \
           --resource-group PrasadRG \
-          --image ${{ vars.ACR_REGISTRY_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
+          --image ${{ env.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
           --revision-suffix ${{ env.IMAGE_TAG }}
