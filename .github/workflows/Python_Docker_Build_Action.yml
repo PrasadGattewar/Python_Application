@@ -79,5 +79,4 @@ jobs:
           --name mycontainerapp \
           --resource-group PrasadRG \
           --image ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
-          --revision-suffix ${{ env.IMAGE_TAG }} \
-          --registry-server ${{ secrets.ACR_NAME }}.azurecr.io
+          --revision-suffix ${{ env.IMAGE_TAG }}
