@@ -3,19 +3,15 @@ name: Build and Push to ACR
 on:
   # Use this property for manual trigger
   workflow_dispatch:
-  
+
+  # Use this property for trigger the pipeline when the PR get raised
   # pull_request:
   #   branches:
   #     - main
 
-# permissions:
-#   id-token: write
-#   contents: read
-
 jobs:
-  build-and-Push:
+  build:
     runs-on: ubuntu-latest
-
     steps:
     # Checkout Repository
     - uses: actions/checkout@v4.2.2
@@ -24,17 +20,7 @@ jobs:
     - name: Azure Login
       uses: azure/login@v2.3.0
       with:
-        # auth-type: IDENTITY
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        # enable-AzPSSession: true
-
-    # Azure CLI
-    - name: Azure CLI script
-      uses: azure/cli@v2.1.0
-      with:
-        azcliversion: latest
-        inlineScript: |
-          az account show
 
     # Docker Login for ACR by fetching the creds
     - name: Docker Login to ACR
@@ -44,17 +30,15 @@ jobs:
         username: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
         password: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
 
-    # # Docker login to ACR 
-    # - name: Docker login to ACR
-    #   run: |
-    #     az acr login --name ${{ secrets.ACR_NAME }}
-
+    # Move required files to root of the repo
     - name: Move app files to root (for Docker build)
       run: cp -r msdocs-python-flask-webapp-quickstart-main/* .
 
+    # Set the tag with the date and time
     - name: Set image tag based on datetime
       run: echo "IMAGE_TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
+    # Build and Push the Image on ACR
     - name: Build and Push to ACR
       uses: docker/build-push-action@v2
       with:
