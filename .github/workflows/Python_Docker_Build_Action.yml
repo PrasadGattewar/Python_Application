@@ -2,10 +2,11 @@ name: Build and Push to ACR
 
 on:
   # Use this property for manual trigger
-  # workflow_dispatch:
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+  
+  # pull_request:
+  #   branches:
+  #     - main
 
 # permissions:
 #   id-token: write
@@ -57,6 +58,6 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:${{ github.ref_name }}
+        tags: ${{ secrets.ACR_NAME }}.azurecr.io/my-python-app:latest
         no-cache: true
 
