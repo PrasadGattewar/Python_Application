@@ -47,7 +47,28 @@ jobs:
         push: true
         tags: |
           ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
-          ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:latest
         no-cache: true
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    # Azure Login
+    - name: Azure Login
+      uses: azure/login@v2.3.0
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Get latest tag from ACR
+    - name: Get latest image tag from ACR
+      id: get_tag
+      run: |
+        LATEST_TAG=$(az acr repository show-tags \
+          --name ${{ secrets.ACR_NAME }} \
+          --repository mypythonapp \
+          --orderby time_desc \
+          --output tsv \
+          --top 1)
+        echo "Latest tag: $LATEST_TAG"
+        echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
