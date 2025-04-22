@@ -72,3 +72,11 @@ jobs:
         echo "Latest tag: $LATEST_TAG"
         echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
+    # Deploy to Azure Container App
+    - name: Deploy to Azure Container App
+      run: |
+        az containerapp update \
+          --name mycontainerapp \
+          --resource-group PrasadRG \
+          --image ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
+          --revision-suffix ${{ env.IMAGE_TAG }}
