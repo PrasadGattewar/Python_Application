@@ -38,6 +38,16 @@ jobs:
     - name: Set image tag based on datetime
       run: echo "IMAGE_TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
+    # Dockerfile Vulnerability Scan
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@0.30.0
+      with:
+        scan-type: config
+        scan-ref: .
+        format: 'table'
+        exit-code: '1'
+        severity: 'HIGH,CRITICAL'
+
     # Build and Push the Image on ACR
     - name: Build and Push to ACR
       uses: docker/build-push-action@v2
