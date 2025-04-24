@@ -38,25 +38,46 @@ jobs:
     - name: Set image tag based on datetime
       run: echo "IMAGE_TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
 
-    # Dockerfile Vulnerability Scan
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@0.30.0
-      with:
-        scan-type: config
-        scan-ref: .
-        format: 'table'
-        exit-code: '1'
-        severity: 'HIGH,CRITICAL'
+    # # Build and Push the Image on ACR
+    # - name: Build and Push to ACR
+    #   uses: docker/build-push-action@v2
+    #   with:
+    #     context: .
+    #     file: ./Dockerfile
+    #     push: true
+    #     tags: |
+    #       ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
+    #     no-cache: true
 
-    # Build and Push the Image on ACR
-    - name: Build and Push to ACR
+    # Build the Docker image (but do not push yet)
+    - name: Build Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: ./Dockerfile
+        push: false
+        tags: ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
+        load: true  # Makes image available locally for scanning
+    
+    # Scan the built image using Trivy
+    - name: Scan Docker image with Trivy
+      uses: aquasecurity/trivy-action@0.28.0
+      with:
+        image-ref: ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
+        format: 'table'
+        exit-code: '1'  # Fail the job if vulnerabilities found
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+    
+    # Push the image to ACR (only if scan passed)
+    - name: Push image to ACR
       uses: docker/build-push-action@v2
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: |
-          ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
+        tags: ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
         no-cache: true
 
   deploy:
