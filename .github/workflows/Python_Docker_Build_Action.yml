@@ -133,7 +133,7 @@ jobs:
           --output tsv \
           --top 1)
         
-        FULL_IMAGE="${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:$LATEST_TAG"
+        FULL_IMAGE="githubactionsregistry.azurecr.io/mypythonapp:$LATEST_TAG"
     
         echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
         echo "FULL_IMAGE=$FULL_IMAGE" >> $GITHUB_ENV
