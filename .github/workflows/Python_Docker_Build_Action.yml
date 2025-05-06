@@ -123,26 +123,26 @@ jobs:
     #     echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
     #     echo "FULL_IMAGE=$FULL_IMAGE" >> $GITHUB_ENV
 
-    - name: Get and Pull latest image from ACR
-      id: get_and_pull_image
-      run: |
-        LATEST_TAG=$(az acr repository show-tags \
-          --name ${{ secrets.ACR_NAME }} \
-          --repository mypythonapp \
-          --orderby time_desc \
-          --output tsv \
-          --top 1)
+    # - name: Get and Pull latest image from ACR
+    #   id: get_and_pull_image
+    #   run: |
+    #     LATEST_TAG=$(az acr repository show-tags \
+    #       --name ${{ secrets.ACR_NAME }} \
+    #       --repository mypythonapp \
+    #       --orderby time_desc \
+    #       --output tsv \
+    #       --top 1)
         
-        FULL_IMAGE="githubactionsregistry.azurecr.io/mypythonapp:$LATEST_TAG"
+    #     FULL_IMAGE="pythonRegistry.azurecr.io/mypythonapp:$LATEST_TAG"
     
-        echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
-        echo "FULL_IMAGE=$FULL_IMAGE" >> $GITHUB_ENV
+    #     echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
+    #     echo "FULL_IMAGE=$FULL_IMAGE" >> $GITHUB_ENV
     
-        echo "Logging in to ACR..."
-        az acr login --name ${{ secrets.ACR_NAME }}
+    #     echo "Logging in to ACR..."
+    #     az acr login --name ${{ secrets.ACR_NAME }}
     
-        echo "Pulling image: $FULL_IMAGE"
-        docker pull $FULL_IMAGE
+    #     echo "Pulling image: $FULL_IMAGE"
+    #     docker pull $FULL_IMAGE
 
     # Deploy to Azure Container App
     - name: Deploy to Azure Container App
