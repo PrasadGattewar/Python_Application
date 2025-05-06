@@ -150,5 +150,5 @@ jobs:
         az containerapp update \
           --name mycontainerapp \
           --resource-group PrasadRG \
-          --image pythonRegistry.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
+          --image pythonregistry.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
           --revision-suffix ${{ env.IMAGE_TAG }}
