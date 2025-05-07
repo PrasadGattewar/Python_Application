@@ -2,12 +2,12 @@ name: Build and Push to ACR
 
 on:
   # Use this property for manual trigger
-  # workflow_dispatch:
+  workflow_dispatch:
 
   # Use this property for trigger the pipeline when the PR get raised
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
 
 jobs:
   build:
@@ -37,17 +37,6 @@ jobs:
     # Set the tag with the date and time
     - name: Set image tag based on datetime
       run: echo "IMAGE_TAG=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
-
-    # # Build and Push the Image on ACR
-    # - name: Build and Push to ACR
-    #   uses: docker/build-push-action@v2
-    #   with:
-    #     context: .
-    #     file: ./Dockerfile
-    #     push: true
-    #     tags: |
-    #       ${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }}
-    #     no-cache: true
 
     # Build the Docker image (but do not push yet)
     - name: Build Docker image
@@ -91,10 +80,6 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    # # Set the ACR NAME
-    # - name: Set ACR_NAME in Environment
-    #   run: echo "ACR_NAME=${{ vars.ACR_REGISTRY_NAME }}" >> $GITHUB_ENV
-
     # Get latest tag from ACR
     - name: Get latest image tag from ACR
       id: get_tag
@@ -107,42 +92,6 @@ jobs:
           --top 1)
         echo "Latest tag: $LATEST_TAG"
         echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
-
-    # # Get full latest image from ACR
-    # - name: Get full latest image reference from ACR
-    #   id: get_image
-    #   run: |
-    #     LATEST_TAG=$(az acr repository show-tags \
-    #       --name ${{ secrets.ACR_NAME }} \
-    #       --repository mypythonapp \
-    #       --orderby time_desc \
-    #       --output tsv \
-    #       --top 1)
-    #     FULL_IMAGE="${{ secrets.ACR_NAME }}.azurecr.io/mypythonapp:$LATEST_TAG"
-    #     echo "Latest image: $FULL_IMAGE"
-    #     echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
-    #     echo "FULL_IMAGE=$FULL_IMAGE" >> $GITHUB_ENV
-
-    # - name: Get and Pull latest image from ACR
-    #   id: get_and_pull_image
-    #   run: |
-    #     LATEST_TAG=$(az acr repository show-tags \
-    #       --name ${{ secrets.ACR_NAME }} \
-    #       --repository mypythonapp \
-    #       --orderby time_desc \
-    #       --output tsv \
-    #       --top 1)
-        
-    #     FULL_IMAGE="pythonRegistry.azurecr.io/mypythonapp:$LATEST_TAG"
-    
-    #     echo "IMAGE_TAG=$LATEST_TAG" >> $GITHUB_ENV
-    #     echo "FULL_IMAGE=$FULL_IMAGE" >> $GITHUB_ENV
-    
-    #     echo "Logging in to ACR..."
-    #     az acr login --name ${{ secrets.ACR_NAME }}
-    
-    #     echo "Pulling image: $FULL_IMAGE"
-    #     docker pull $FULL_IMAGE
 
     # Deploy to Azure Container App
     - name: Deploy to Azure Container App
