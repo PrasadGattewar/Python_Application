@@ -1,0 +1,6 @@
+projectKey=Python_Application
+serverUrl=http://localhost:9087
+serverVersion=9.9.0.65466
+dashboardUrl=http://localhost:9087/dashboard?id=Python_Application
+ceTaskId=AZalmqFXi9jCGyR4m5Sm
+ceTaskUrl=http://localhost:9087/api/ce/task?id=AZalmqFXi9jCGyR4m5Sm
