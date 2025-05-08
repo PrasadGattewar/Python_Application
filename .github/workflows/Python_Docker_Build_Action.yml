@@ -99,5 +99,5 @@ jobs:
         az containerapp update \
           --name mycontainerapp \
           --resource-group PrasadRG \
-          --image ${{ ACR_REGISTRY_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
+          --image ${{ vars.ACR_REGISTRY_NAME }}.azurecr.io/mypythonapp:${{ env.IMAGE_TAG }} \
           --revision-suffix ${{ env.IMAGE_TAG }}
